@@ -1,0 +1,41 @@
+name: LightGCN
+channels:
+  - nvidia
+  - conda-forge
+  - defaults
+
+dependencies:
+  - python=3.8.20
+  - cudatoolkit=11.3.1
+  - pip
+  - pip:
+      - --extra-index-url https://download.pytorch.org/whl/cu113
+      - -find-links https://data.dgl.ai/wheels/repo.html
+      - torch==1.10.1+cu113
+      - dgl-cu113==0.9.1
+      - numpy==1.21.6
+      - scipy==1.10.1
+      - pandas==2.0.3
+      - wandb==0.24.0
+      - pybind11==3.0.1
+      - matplotlib==3.7.5
+      - python-dotenv==1.0.1 
+
+# -----------------------------------------------------------------------------
+# INSTRUCTION: How to compile C++ Extension (sampling.so)
+# -----------------------------------------------------------------------------
+# The 'sampling.cpp' file (located in code/sources/) MUST be compiled manually
+# before running the training. This extension provides efficient neighbor sampling.
+#
+# 1. Activate this environment:
+#    conda activate LightGCN
+#
+# 2. Navigate to the directory containing sampling.cpp:
+#    cd code/sources
+#
+# 3. Run the compilation command (ensure g++ is available):
+#    g++ -O3 -Wall -shared -std=c++14 -fPIC \
+#      `python -m pybind11 --includes` \
+#      sampling.cpp -o sampling.so -fvisibility=hidden
+#
+# 4. Verify that 'sampling.so' was created in the current folder.
